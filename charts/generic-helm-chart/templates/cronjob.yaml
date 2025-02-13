@@ -20,6 +20,7 @@ spec:
           imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          serviceAccountName: {{ .Values.cronjob.serviceAccountName | default (include "app.serviceAccountName" .) }}
           containers:
             - name: {{ include "app.fullname" . }}
               image: "{{ .Values.cronjob.image.repository }}:{{ .Values.cronjob.image.tag | default .Chart.AppVersion }}"
@@ -30,7 +31,7 @@ spec:
                 - {{ . }}
                 {{- end }}
               {{- end }}
-              env:
+              env: 
               - name: POD_NAME
                 valueFrom:
                   fieldRef:
@@ -62,5 +63,25 @@ spec:
               resources:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
+              {{- with .Values.cronjob.volumeMounts }}
+              volumeMounts:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          {{- with .Values.cronjob.volumes }}
+          volumes:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.cronjob.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.cronjob.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.cronjob.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           restartPolicy: {{ .Values.cronjob.restartPolicy }}
 {{- end }}

@@ -165,6 +165,7 @@ cronjob:
   #   repository: "registry.gitlab.int.hextech.io/operations/htm-nav"
   #   pullPolicy: IfNotPresent
   #   tag: "ff66184d"
+  # serviceAccountName: "overwrite-service-account-name"
   # restartPolicy: "OnFailure"
   # envFrom:
   #   - type: secret
@@ -176,6 +177,13 @@ cronjob:
   #   limits:
   #     memory: 400Mi
   #     cpu: 200m
+  # volumeMounts:
+  #   - mountPath: /app/secrets/
+  #     name: example-secret
+  # volumes:
+  #   - name: example-secret
+  #     secret:
+  #       secretName: k8s-app-secret
 
 additionalCronjobs:
   enabled: false
